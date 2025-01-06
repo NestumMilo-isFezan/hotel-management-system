@@ -1,0 +1,99 @@
+index ini utk view room
+
+sql = SELECT room.*, roomtype.* FROM room LEFT JOIN room ON room.typeID = roomtype.typeID
+
+div- content
+    h1- Manage Room
+    
+    div- col-1
+        div- table title
+            h2- Room List
+            button- Add Room
+        div- table content
+            table- view data
+
+    div- col-2
+        div- table title
+            h2- Add Room
+        div- table content
+            table- form data (action.php)
+
+untuk action.php
+Kasi insert
+$roomNo = $_POST['roomNo']
+$roomtype = $_POST['typeID']
+$hotelID = 1
+
+-> INSERT ON room(roomNo, typeID, hotelID, roomstatus) VALUES ($roomNo, $typeID, $hotelID, 'available')
+
+if(mysqli_query($conn, $sql)){
+    div- content
+        div- table title
+            h2- Successful
+        div- icon
+            img- src ../../img/success.png
+        div- desc
+            p- Successful Add New Room
+}
+else{
+        div- content
+                div- table title
+                    h2- Unsuccessful
+                div- icon
+                    img- src ../../img/db-error.png
+                div- desc
+                    p- SQL went wrong..
+}
+
+// Buat di page edit.php
+    div- col-4
+        div- table title
+            h2- Edit Room
+        div- table content
+            table- form data (edit-action.php)
+=========================================
+Ini view room table nnti
+
+No | Room No (roomNo) | Type | Image | Status | Modify (Edit/Delete)(roomID)
+
+=========================================
+jgn lupa
+if(isset($_GET[id].....)){
+$id = $_GET[id]
+// Buat di page edit-news.php
+    div- col-4
+        div- table title
+            h2- Edit Room
+        div- table content
+            table- form data (edit-action.php)
+            hidden - $id
+
+}
+
+untuk edit-action
+$roomNo = $_POST['roomNo']
+$roomtype = $_POST['typeID']
+$roomID = $_POST['id]
+$hotelID = 1
+
+
+-> UPDATE ON news SET roomNo= ...... WHERE roomID=$roomID AND hotelID=1
+
+if(mysqli_query($conn, $sql)){
+    div- content
+        div- table title
+            h2- Successful
+        div- icon
+            img- src ../../img/success.png
+        div- desc
+            p- Successful Edit Room
+}
+else{
+        div- content
+                div- table title
+                    h2- Unsuccessful
+                div- icon
+                    img- src ../../img/db-error.png
+                div- desc
+                    p- SQL went wrong..
+}

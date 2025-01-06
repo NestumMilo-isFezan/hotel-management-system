@@ -1,0 +1,75 @@
+Index dia ni guna Get Method,
+jadi time kau test kat Chrome
+
+test guna ni link:
+localhost:80/staff/payment/index.php?id=1
+
+if(isset($_GET['id'])....) // Rujuk Lab
+$id = $_GET['id']
+$guestid = $_SESSION['guestID']
+
+SELECT total_price FROM booking WHERE bookID= $id AND guestID= $guestID
+
+Page index ini kosong, jadi aq xletak navbar....
+
+Dalam tu susun jak html jadi gini
+
+div- content
+    div- col-1
+        div- table title
+            h2- Payment
+
+        div- price
+            h2- $total_price
+
+        div- table content
+            form-
+                table- form
+                hidden- $id
+                hidden- $total_price
+
+        div- table button
+            button- Pay
+
+
+=============================
+Form table aq nak ada ini
+Amount Pay|
+Method (List)| (Cash, Credit Card, E-Wallet)
+
+
+
+=============================
+Untuk pay.php dia, nnti kasi insert
+$pay = $_POST['amountpay']
+$balance = $_POST['amountpay'] - $_POST['total_price']
+$paymethod = $_POST['paymethod']
+
+INSERT ON payment(bookID, amountpay, balance, method)
+VALUES ($id, $pay, $balance, method)
+
+if(mysqli_query($conn, $sql)){
+    div- content
+        div- col-1
+            div- table title
+                h2- Payment Succesful
+
+            div- icon
+                img- src = ../../img/success.png
+
+            div- table content
+                table- info
+
+            div- table button
+                button- Continue (onClick= ) //cari function JS utk href location... pastu ini location dia ../index.php
+
+}
+else{
+    div- content
+        div- table title
+            h2- Payment Unsuccesful
+        div- icon
+            img- src ../../img/user-error.png
+}
+
+Kalau boleh buat function print jadi pdf, buat... kalau tak, tak payah HAHAHA

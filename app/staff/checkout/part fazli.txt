@@ -1,0 +1,65 @@
+Buat Title name Manage Hotel
+
+Yang ini pula begini.....
+Kalau di booking table tu ada data yg di status "checkin"
+dia akan terlist kat view ready to check out....
+Module ini cuma nak staff tahu kalau ada
+customer nak buat checkout,
+
+Jadi staff akan tekan butang dlm list ready to checkout,
+menandakan customer dah kosongkan bilik dan checkout
+
+Mungkin boleh buat tambahan table lain untuk buat table
+list of checked out guest
+
+div- content
+    h1- Manage Check Out
+
+    div- col-1
+        div- table header
+            h2- Ready to check out
+        div- table content
+            table- view data (WHERE status= "checkin")
+
+    div- col-2 // Optional
+        div- table header
+            h2- Checked Out Guest
+        div-table content
+            table- view data (WHERE status= "checkout")
+
+
+====================================
+Ini command sql dia
+SELECT booking.*, room.*, hotelservice.* FROM booking
+JOIN room ON booking.roomID = room.roomID
+JOIN guest ON booking.guestID = guest.guestID
+
+
+utk table make sure ini layout dia
+====================================
+No | Guest Name | Room No (roomNo) | Check In Date(checkIn) | Check Out (checkOut) | Modify
+
+
+Di bahagian modify
+-> kasi buat
+<a href="checkout.php?book=<?= $bookID?>&room=<?= $roomID?>"
+<a href="delete.php?book<?= $bookID?>"
+
+=========================================
+
+nanti butang dekat Modify kena namakan "Check-Out"
+
+di action checkin.php buat sql query utk
+->> UPDATE ON booking SET status = "checkout" WHERE bookID = $_GET['book']
+if(mysqli_query($conn, $sql)){
+    UPDATE ON room SET roomstatus = "available" WHERE roomID = $_GET['room']
+    mysqli_query($conn, $sql)
+    header(../payment/index.php) //gitu flow dia
+}
+
+
+di action delete.php
+->> DELETE * FROM booking WHERE bookID= $_GET['book']
+
+
+

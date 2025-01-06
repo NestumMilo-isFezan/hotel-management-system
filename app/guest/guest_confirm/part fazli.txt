@@ -1,0 +1,87 @@
+Buat Title name Manage Hotel
+
+Jadi dia begini.....
+Kalau di booking table tu ada data yg di status "confirm"
+dia akan terlist kat view check in....
+Module ini cuma nak staff tahu kalau ada
+customer datang hotel untuk buat checkin,
+
+Jadi staff akan tekan butang dlm list checkin,
+menandakan customer tengah occupy dalam bilik tu
+
+div- content
+    h1- Manage Check In
+
+    div- col-1
+        div- table content
+            table- view data (WHERE status= "confirmed")
+
+
+====================================
+Ini command sql dia
+SELECT booking.*, room.*, hotelservice.* FROM booking
+JOIN room ON booking.roomID = room.roomID
+JOIN guest ON booking.guestID = guest.guestID
+
+
+utk table make sure ini layout dia
+====================================
+No | Guest Name | Room No (roomNo) | Check In Date(checkIn) | Check Out (checkOut) | Modify
+
+
+Di bahagian modify
+-> kasi buat
+<a href="checkin.php?book=<?= $bookID?>"
+<a href="cancel.php?book=<?= $bookID?>"
+
+
+=========================================
+
+nanti butang dekat Modify kena namakan "Check-In" dan "Cancel"
+
+di action checkin.php buat sql query utk
+->> UPDATE ON booking SET status = "checkin" WHERE bookID = $_GET['book']
+
+if(mysqli_query($conn, $sql)){
+    div- content
+        div- table title
+            h2- Successful
+        div- icon
+            img- src ../../img/success.png
+        div- desc
+            p- Successful Check In Guest
+}
+else{
+        div- content
+                div- table title
+                    h2- Unsuccessful
+                div- icon
+                    img- src ../../img/db-error.png
+                div- desc
+                    p- SQL went wrong..
+}
+
+
+di action cancel.php
+->> DELETE * FROM booking WHERE bookID= $_GET['book']
+
+if(mysqli_query($conn, $sql)){
+    div- content
+        div- table title
+            h2- Successful
+        div- icon
+            img- src ../../img/success.png
+        div- desc
+            p- Successful Remove Book Record
+}
+else{
+        div- content
+                div- table title
+                    h2- Unsuccessful
+                div- icon
+                    img- src ../../img/db-error.png
+                div- desc
+                    p- SQL went wrong..
+}
+
+

@@ -1,0 +1,11 @@
+'SELECT * FROM guest WHERE guestID=' $session guestID gitu
+Buat Page view profile,
+masukkan data guest dalam profile, kalau kosong kasi ubah nama dia mcm
+"This user doesn't have Profile Name" gitu
+
+
+Buat Page Form based on table guest,
+'SELECT * FROM guest WHERE guestID=' $session guestID gitu
+sini, buat action
+UPDATE ON guest SET semua column dalam table guest di update guna POST
+make sure form to diset required
