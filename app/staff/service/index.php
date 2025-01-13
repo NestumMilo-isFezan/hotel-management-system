@@ -249,44 +249,20 @@ require (TEMP_DIR."/adminpart.php");
 </div>
 </div>
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="editToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-        <img src="<?= $hotelicon?>" class="rounded me-2" alt="..." style="width:15px; height:15px;">
+<?php function renderToast($id, $message) { ?>
+<div id="<?= $id ?>" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+        <img src="<?= $hotelicon ?>" class="rounded me-2" alt="..." style="width:15px; height:15px;">
         <strong class="me-auto">System</strong>
-        <small>A changes made...</small>
+        <small>A change was made...</small>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-        Successfully Edit Hotel Service
-        </div>
     </div>
-
-    <div id="deleteToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-        <img src="<?= $hotelicon?>" class="rounded me-2" alt="..." style="width:15px; height:15px;">
-        <strong class="me-auto">System</strong>
-        <small>A changes made...</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-        Successfully Delete Hotel Service
-        </div>
+    <div class="toast-body">
+        <?= $message ?>
     </div>
-
-    <div id="addToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-        <img src="<?= $hotelicon?>" class="rounded me-2" alt="..." style="width:15px; height:15px;">
-        <strong class="me-auto">System</strong>
-        <small>A changes made...</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-        Successfully Add Hotel Service
-        </div>
-    </div>
-
 </div>
+<?php } ?>
+
 
     
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
