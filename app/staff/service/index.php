@@ -1,13 +1,13 @@
 <?php
 require("../../directory.php");
 require (TEMP_DIR."/adminpart.php");
-include('sidebar.php');
-$modalTitle = 'Add Service'; 
-include('modal.php'); 
-include('toast.php'); 
-renderToast('addToast', 'Successfully Add Hotel Service'); 
-renderToast('editToast', 'Successfully Edit Hotel Service'); 
-renderToast('deleteToast', 'Successfully Delete Hotel Service'); 
+include_once('sidebar.php');
+$modalTitle = 'Add Service';
+include_once('modal.php');
+include_once('toast.php');
+renderToast('addToast', 'Successfully Add Hotel Service');
+renderToast('editToast', 'Successfully Edit Hotel Service');
+renderToast('deleteToast', 'Successfully Delete Hotel Service');
 ?>
 
 <!DOCTYPE html>
