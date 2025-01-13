@@ -1,6 +1,9 @@
 <?php
 require("../directory.php");
 require (TEMP_DIR."/adminpart.php");
+ 
+$modalTitle = 'Add Service'; 
+include('modal.php'); 
 ?>
 
 <!DOCTYPE html>
