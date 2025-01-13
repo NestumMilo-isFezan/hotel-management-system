@@ -1,4 +1,4 @@
-<?
+<?php
   include('../../directory.php');
   require (TEMP_DIR.'/roompart.php');
 ?>
