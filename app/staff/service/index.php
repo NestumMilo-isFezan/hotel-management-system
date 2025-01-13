@@ -1,7 +1,7 @@
 <?php
 require("../../directory.php");
 require (TEMP_DIR."/adminpart.php");
-
+php include('sidebar.php');
 $modalTitle = 'Add Service'; 
 include('modal.php'); 
 include('toast.php'); 
