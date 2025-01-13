@@ -1,7 +1,10 @@
 <?php
 require("../../directory.php");
 require (TEMP_DIR."/adminpart.php");
-
+include('toast.php'); 
+renderToast('addToast', 'Successfully Add Hotel Service'); 
+renderToast('editToast', 'Successfully Edit Hotel Service'); 
+renderToast('deleteToast', 'Successfully Delete Hotel Service'); 
 ?>
 
 <!DOCTYPE html>
