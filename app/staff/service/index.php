@@ -1,7 +1,13 @@
 <?php
 require("../../directory.php");
 require (TEMP_DIR."/adminpart.php");
-
+php include('sidebar.php');
+$modalTitle = 'Add Service'; 
+include('modal.php'); 
+include('toast.php'); 
+renderToast('addToast', 'Successfully Add Hotel Service'); 
+renderToast('editToast', 'Successfully Edit Hotel Service'); 
+renderToast('deleteToast', 'Successfully Delete Hotel Service'); 
 ?>
 
 <!DOCTYPE html>
@@ -22,93 +28,37 @@ require (TEMP_DIR."/adminpart.php");
         <i class='bx bx-menu fs-3'></i>
     </button>
 
-    <div class="offcanvas offcanvas-start h-100" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div>
-                <a href="./index.php" class="d-flex align-items-center mb-0 mb-md-3 me-md-auto text-white text-decoration-none">
-                    <img src="<?= $hotelicon?>" alt="<?= $hotelname?>" width="33" height="33" class="me-sm-2">
-                    <span class="fs-5 fw-bold"><?= $hotelname?></span>
-                </a>
-                <hr>
-                <ul class="flex-column mb-auto list-group mx-1">
-                    <li class="list-group-item">
-                        <a href="../index.php" class="nav-link text-white">
-                            <i class='bx bxs-home me-sm-2 fs-4'></i>
-                            <span class="d-inline-block">Home</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="../hotel-info/index.php" class="nav-link text-white">
-                            <i class='bx bxs-building-house me-sm-2 fs-4' ></i>
-                            <span class="d-inline-block">Manage Hotel</span>
-                        </a>
-                    </li>
-                    <li class="list-unstyled">
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
-                                <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                    <i class='bx bxs-hotel fs-4' ></i>&nbsp;<span class="ms-1 d-inline-block">Manage Room</span>
-                                </button>
-                                </h3>
-                                <div id="collapseOne" class="accordion-collapse collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="container-fluid w-100 h-100">
-                                        <ul class="btn-toggle-nav list-unstyled fw-normal list-group">
-                                            <li class="list-group-item"><a href="../room/index.php" class="link-body-emphasis text-decoration-none rounded mb-sm-3"><i class='bx bxs-plus-square me-sm-2 fs-4' ></i><span class="d-inline-block">Hotel Room</span></a></li>
-                                            <li class="list-group-item"><a href="../room-type/index.php" class="link-body-emphasis text-decoration-none rounded mb-sm-1"><i class='bx bxs-layer-plus me-sm-2 fs-4'></i><span class="d-inline-block">Room Type</span></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item active">
-                        <a href="../service/index.php" class="nav-link text-white">
-                        <i class='bx bxs-cog me-sm-2 fs-4' ></i>
-                        <span class="d-inline-block">Manage Service</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="../book/index.php" class="nav-link text-white">
-                        <i class='bx bxs-book-bookmark me-sm-2 fs-4' ></i>
-                        <span class="d-inline-block">Manage Booking</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="../checkin/index.php" class="nav-link text-white">
-                        <i class='bx bx-list-check me-sm-2 fs-4' ></i>
-                        <span class="d-inline-block">Manage Check In</span>
-                        </a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="../checkout/index.php" class="nav-link text-white">
-                        <i class='bx bx-list-minus me-sm-2 fs-4' ></i>
-                        <span class="d-inline-block">Manage Check Out</span>
-                        </a>
-                    </li>
-                </ul>
-                <hr>
-            </div>
-            <div class="dropdown mx-2 align-self-end">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="<?= $userIcon?>" alt="" width="32" height="32" class="rounded-circle me-sm-2">
-                    <span class="d-inline-block"><strong><?= $firstName?></strong></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="../../auth/staff-register.php"><i class='bx bxs-user-plus me-sm-2' ></i><span class="ms-1">Add Staff</span></a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="../../auth/logout.php"><i class='bx bxs-log-out me-sm-2' ></i><span class="ms-1">Sign out</span></a></li>
-                </ul>
-            </div>
-                
-            </div>
+   <div class="offcanvas offcanvas-start h-100" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a href="./index.php" class="d-flex align-items-center mb-3 me-md-auto text-white text-decoration-none">
+            <img src="<?= $hotelicon ?>" alt="<?= $hotelname ?>" width="33" height="33" class="me-sm-2">
+            <span class="fs-5 fw-bold"><?= $hotelname ?></span>
+        </a>
+        <hr>
+        <ul class="flex-column mb-auto list-group mx-1">
+            <li class="list-group-item">
+                <a href="../index.php" class="nav-link text-white"><i class='bx bxs-home me-sm-2 fs-4'></i> Home</a>
+            </li>
+            <!-- Additional links... -->
+        </ul>
+        <hr>
+        <div class="dropdown mx-2 align-self-end">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="<?= $userIcon ?>" alt="" width="32" height="32" class="rounded-circle me-sm-2">
+                <span><strong><?= $firstName ?></strong></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" href="../../auth/staff-register.php"><i class='bx bxs-user-plus me-sm-2'></i> Add Staff</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="../../auth/logout.php"><i class='bx bxs-log-out me-sm-2'></i> Sign out</a></li>
+            </ul>
         </div>
     </div>
+</div>
+
 
     <div class = "container-fluid">
         <div class = "h-100">
@@ -201,92 +151,42 @@ require (TEMP_DIR."/adminpart.php");
 
     <!-- Modal -->
     <div class="modal fade" id="formmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <form class="modal-content" method="post" id="addform">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Hotel Services</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="w-100">
-                        <div class="mb-1">
-                            <label for="servicename" class="col-form-label">Service Name :</label>
-                            <input type="text" class="form-control" id="servicename" name="servicename">
-                        </div>
-                        <div clas="mb-3">
-                            <label for="status" class="col-form-label">Service Availability :</label>
-                            <select class="form-select" aria-label="service status" name="status" id="status">
-                                <option value="select" selected>Select service status</option>
-                                <option value="available">Available</option>
-                                <option value="unavailable">Unavailable</option>
-                            </select>
-                        </div>
-                        <div class="mb-1">
-                            <label for="price" class="col-form-label">Price :</label>
-                            <div class="input-group">
-                                <span class="input-group-text">&nbsp; RM &nbsp;</span>
-                                <input type="text" class="form-control" id="price" name="price" placeholder="Price">
-                            </div>
-                        </div>
-                        <div class="mb-1">
-                            <label for="description" class="col-form-label">Description :</label>
-                            <div class="form-floating">
-                                <textarea class="form-control" placeholder="Describe this services" id="description" name="description" style="height: 100px;"></textarea>
-                                <label for="description">Describe this services</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="submit" id="submit" data-bs-dismiss="modal">Submit</button>
-                </div>
-            </form>
-        </div>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <form class="modal-content" method="post" id="addform">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"><?= $modalTitle ?? 'Add Hotel Services' ?></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Dynamic form content here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>
+            </div>
+        </form>
     </div>
+</div>
+
 
 
 </div>
 </div>
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="editToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-        <img src="<?= $hotelicon?>" class="rounded me-2" alt="..." style="width:15px; height:15px;">
+<?php function renderToast($id, $message) { ?>
+<div id="<?= $id ?>" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+        <img src="<?= $hotelicon ?>" class="rounded me-2" alt="..." style="width:15px; height:15px;">
         <strong class="me-auto">System</strong>
-        <small>A changes made...</small>
+        <small>A change was made...</small>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-        Successfully Edit Hotel Service
-        </div>
     </div>
-
-    <div id="deleteToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-        <img src="<?= $hotelicon?>" class="rounded me-2" alt="..." style="width:15px; height:15px;">
-        <strong class="me-auto">System</strong>
-        <small>A changes made...</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-        Successfully Delete Hotel Service
-        </div>
+    <div class="toast-body">
+        <?= $message ?>
     </div>
-
-    <div id="addToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-        <img src="<?= $hotelicon?>" class="rounded me-2" alt="..." style="width:15px; height:15px;">
-        <strong class="me-auto">System</strong>
-        <small>A changes made...</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-        Successfully Add Hotel Service
-        </div>
-    </div>
-
 </div>
+<?php } ?>
+
 
     
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
