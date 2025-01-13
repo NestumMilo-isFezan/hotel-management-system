@@ -144,7 +144,7 @@ require (TEMP_DIR."/adminpart.php");
                     <th width="25%">Room No.</th>
                     <th width="25%">Room Type</th>
                     <th width="20%">Room Status</th>
-                    <th width="20%">Action</th>
+                    <th class= "table-header-action">Action</th>
                 </tr>
                 <tbody class="table-danger table-striped">
 
