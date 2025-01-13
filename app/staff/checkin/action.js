@@ -2,24 +2,18 @@ $(document).ready(function () {
   $(".checkinit").click(function (e) {
     e.preventDefault();
 
-    $.ajax({
-      url: "checkin.php",
-      type: "post",
-      data: {
-        book: $(this).data("book"),
-      },
-      success: function (response) {
-        if (response === "ok") {
-          $("#checkincontent").load(document.URL + " #checkintable");
+    async function handleCheckIn(bookingId) {
+      try {
+        const response = await fetch(`api/checkin.php?id=${bookingId}`);
+        await ErrorHandler.handleFetchError(response);
+        const data = await response.json();
+        // Handle success
+      } catch (error) {
+        ErrorHandler.showError(error.message);
+      }
+    }
 
-          var toaster = document.getElementById("editToast");
-          var toast = new bootstrap.Toast(toaster);
-          toast.show();
-        } else if (response === "error") {
-          alert("Error");
-        }
-      },
-    });
+    handleCheckIn($(this).data("book"));
   });
 
   $(".cancelit").click(function () {

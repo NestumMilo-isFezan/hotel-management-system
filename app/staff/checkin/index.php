@@ -1,6 +1,8 @@
 <?php
 require("../../directory.php");
 require (TEMP_DIR."/adminpart.php");
+require_once('../templates/sidebar-nav.php');
+renderSidebarNav('checkin');
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +18,7 @@ require (TEMP_DIR."/adminpart.php");
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
 
-<body class="vh-100" data-bs-theme="dark"> 
+<body class="vh-100" data-bs-theme="dark">
     <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
         <i class='bx bx-menu fs-3'></i>
     </button>
@@ -104,7 +106,7 @@ require (TEMP_DIR."/adminpart.php");
                     <li><a class="dropdown-item" href="../../auth/logout.php"><i class='bx bxs-log-out me-sm-2' ></i><span class="ms-1">Sign out</span></a></li>
                 </ul>
             </div>
-                
+
             </div>
         </div>
     </div>
@@ -138,11 +140,9 @@ require (TEMP_DIR."/adminpart.php");
                         <tbody class="table-success">
 
                             <?php
-                            $sql = "SELECT booking.*, room.*, guest.* FROM booking
-                            JOIN room ON booking.roomID = room.roomID
-                            JOIN guest ON booking.guestID = guest.guestID
-                            WHERE booking.status = 'confirmed'";
-                            $result = mysqli_query($conn, $sql);
+                            require_once('../repositories/BookingRepository.php');
+                            $bookingRepo = new BookingRepository($conn);
+                            $checkInBookings = $bookingRepo->getBookingsTable('confirmed');
 
                             if (mysqli_num_rows($result) > 0) {
                                 // output data of each row
@@ -165,9 +165,9 @@ require (TEMP_DIR."/adminpart.php");
                             </div>
                             </td>
                             </tr>
-                                
+
                             <?php
-                                
+
                             }
                             }
                             else {
