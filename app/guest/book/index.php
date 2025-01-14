@@ -29,7 +29,7 @@ require_once TEMP_DIR . '/bookpart.php';
   <body data-bs-theme="dark">
     <!-- Navbar -->
     <?php 
-      require (TEMP_DIR."/navguest.php");
+      require_once (TEMP_DIR."/navguest.php");
     ?>
     <!-- End Navbar -->
 
