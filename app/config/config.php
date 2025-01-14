@@ -1,9 +1,9 @@
 <?php
 // Use environment variables or fallback to default values
-$host = getenv('DB_HOST') ?: '127.0.0.1';
+$host = getenv('DB_HOST') ?: 'maria_db';
 $user = getenv('DB_USERNAME') ?: 'mangsacoding';
-$pass = getenv('DB_PASSWORD') ?: 'mangsacoding';
-$db = getenv('DB_DATABASE') ?: 'hotelmanagement_test';
+$pass = getenv('DB_PASSWORD') ?: 'developer';
+$db = getenv('DB_DATABASE') ?: 'hotelmanagement';
 
 // Create connection
 $conn = mysqli_connect($host, $user, $pass, $db);
