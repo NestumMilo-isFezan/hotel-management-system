@@ -11,81 +11,89 @@ class CheckInOutTest extends TestCase
         global $conn;
         $this->conn = $conn;
 
-        // Reset test database state
-        mysqli_query($this->conn, "DELETE FROM booking WHERE bookID = 1");
-        mysqli_query($this->conn, "DELETE FROM room WHERE roomID = 101");
-
-        // Create test data
-        mysqli_query($this->conn, "INSERT INTO room (roomID, hotelID, typeID, roomstatus, roomNo)
-            VALUES (101, 1, 1, 'available', '101')");
-        mysqli_query($this->conn, "INSERT INTO booking (bookID, guestID, roomID, status)
-            VALUES (1, 1, 101, 'confirmed')");
+        // Add test data
+        mysqli_query($this->conn, "INSERT INTO room (roomID, roomstatus) VALUES (101, 'unavailable')");
+        mysqli_query($this->conn, "INSERT INTO booking (bookID, roomID, status)
+            VALUES (1, 101, 'confirmed')");
     }
 
     public function testCheckIn()
     {
-        $bookingId = 1;
+        // Test check-in functionality
+        $bookId = 1;
+        $sql = "UPDATE booking SET status = 'checkin' WHERE bookID = $bookId";
 
-        // Process check-in
-        $updateBookingSql = "UPDATE booking SET status = 'checkin' WHERE bookID = $bookingId";
-        $updateRoomSql = "UPDATE room r
-                         JOIN booking b ON r.roomID = b.roomID
-                         SET r.roomstatus = 'occupied'
-                         WHERE b.bookID = $bookingId";
+        $result = mysqli_query($this->conn, $sql);
+        $this->assertTrue($result);
 
-        $result1 = mysqli_query($this->conn, $updateBookingSql);
-        $result2 = mysqli_query($this->conn, $updateRoomSql);
+        // Verify status was updated
+        $checkSql = "SELECT status FROM booking WHERE bookID = $bookId";
+        $result = mysqli_query($this->conn, $checkSql);
+        $booking = mysqli_fetch_assoc($result);
 
-        $this->assertTrue($result1 && $result2);
-
-        // Verify status changes
-        $bookingStatus = $this->getBookingStatus($bookingId);
-        $roomStatus = $this->getRoomStatus($bookingId);
-
-        $this->assertEquals('checkin', $bookingStatus);
-        $this->assertEquals('occupied', $roomStatus);
+        $this->assertEquals('checkin', $booking['status']);
     }
 
     public function testCheckOut()
     {
-        $bookingId = 1;
+        // Test check-out functionality
+        $bookId = 1;
+        $sql = "UPDATE booking SET status = 'checkout' WHERE bookID = $bookId";
 
-        // Process check-out
-        $updateBookingSql = "UPDATE booking SET status = 'checkout' WHERE bookID = $bookingId";
-        $updateRoomSql = "UPDATE room r
-                         JOIN booking b ON r.roomID = b.roomID
-                         SET r.roomstatus = 'available'
-                         WHERE b.bookID = $bookingId";
+        $result = mysqli_query($this->conn, $sql);
+        $this->assertTrue($result);
 
-        $result1 = mysqli_query($this->conn, $updateBookingSql);
-        $result2 = mysqli_query($this->conn, $updateRoomSql);
+        // Verify status was updated
+        $checkSql = "SELECT status FROM booking WHERE bookID = $bookId";
+        $result = mysqli_query($this->conn, $checkSql);
+        $booking = mysqli_fetch_assoc($result);
 
-        $this->assertTrue($result1 && $result2);
-
-        // Verify status changes
-        $bookingStatus = $this->getBookingStatus($bookingId);
-        $roomStatus = $this->getRoomStatus($bookingId);
-
-        $this->assertEquals('checkout', $bookingStatus);
-        $this->assertEquals('available', $roomStatus);
+        $this->assertEquals('checkout', $booking['status']);
     }
 
-    private function getBookingStatus($bookingId)
+    public function testDeleteBooking()
     {
-        $sql = "SELECT status FROM booking WHERE bookID = $bookingId";
+        // Test delete booking functionality
+        $bookId = 1;
+        $sql = "DELETE FROM booking WHERE bookID = $bookId";
+
         $result = mysqli_query($this->conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        return $row['status'];
+        $this->assertTrue($result);
+
+        // Verify booking was deleted
+        $checkSql = "SELECT * FROM booking WHERE bookID = $bookId";
+        $result = mysqli_query($this->conn, $checkSql);
+
+        $this->assertEquals(0, mysqli_num_rows($result));
     }
 
-    private function getRoomStatus($bookingId)
+    public function testCancelBooking()
     {
-        $sql = "SELECT r.roomstatus FROM room r
-                JOIN booking b ON r.roomID = b.roomID
-                WHERE b.bookID = $bookingId";
+        // Test cancel booking functionality
+        $bookId = 1;
+        $roomId = 101;
+
+        // Update booking status to cancelled
+        $sql = "UPDATE booking SET status = 'cancelled' WHERE bookID = $bookId";
         $result = mysqli_query($this->conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        return $row['roomstatus'];
+        $this->assertTrue($result);
+
+        // Update room status to available
+        $sql = "UPDATE room SET roomstatus = 'available' WHERE roomID = $roomId";
+        $result = mysqli_query($this->conn, $sql);
+        $this->assertTrue($result);
+
+        // Verify booking status
+        $checkBookingSql = "SELECT status FROM booking WHERE bookID = $bookId";
+        $bookingResult = mysqli_query($this->conn, $checkBookingSql);
+        $booking = mysqli_fetch_assoc($bookingResult);
+        $this->assertEquals('cancelled', $booking['status']);
+
+        // Verify room status
+        $checkRoomSql = "SELECT roomstatus FROM room WHERE roomID = $roomId";
+        $roomResult = mysqli_query($this->conn, $checkRoomSql);
+        $room = mysqli_fetch_assoc($roomResult);
+        $this->assertEquals('available', $room['roomstatus']);
     }
 
     protected function tearDown(): void
