@@ -21,8 +21,13 @@ class CheckInOutTest extends TestCase
         }
 
         // Add test data
+        $roomtype = "INSERT INTO roomtype (hotelID, name, description, price, capacity, room_imgpath)
+            VALUES (1, 'single', 'available', 100, 1, 'test.jpg')";
+        if (!mysqli_query($this->conn, $roomtype)) {
+            $this->markTestSkipped('Could not insert test room type data: ' . mysqli_error($this->conn));
+        }
         $roomsql = "INSERT INTO room (hotelID, typeID, roomstatus, roomNo)
-        VALUES (1, 'single', 'available', '101')";
+        VALUES (1, 1, 'available', '101')";
         if (!mysqli_query($this->conn, $roomsql)) {
             $this->markTestSkipped('Could not insert test room data: ' . mysqli_error($this->conn));
         }
