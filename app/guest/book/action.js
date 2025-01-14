@@ -2,93 +2,105 @@ $(document).ready(function () {
   // Variables
   let totalHotel = 0;
   let servicePay = 0;
-  let totalpayment = 0;
+  let totalPayment = 0;
 
-  // Function to update totalPrice
-  function updateTotalPrice() {
-    const totalPrice = (totalHotel + servicePay).toFixed(2);
-    $("#estprice").text(totalPrice);
-    $("#totalprice").val(totalPrice);
-    totalpayment = totalPrice;
+  // Reusable Function: Calculate Total Price
+  function calculateTotalPrice(roomPrice, days, servicePrice) {
+    return (roomPrice * days + servicePrice).toFixed(2);
   }
 
-  // Event when checkin and checkout is selected
-  $("#checkin, #checkout").change(function () {
-    // Init Date
-    const checkIn = new Date($("#checkin").val());
-    const checkOut = new Date(
-      $("#checkout").val() ||
-        new Date(checkIn.getTime() + 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split("T")[0]
-    );
+  // Reusable Function: Update UI for Total Price
+  function updateUI(price) {
+    $("#estprice").text(price);
+    $("#totalprice").val(price);
+    totalPayment = price;
+  }
 
-    // Validate Date
+  // Reusable Function: Validate Dates
+  function validateDates(checkIn, checkOut) {
     if (checkIn >= checkOut) {
       alert("Error: Check-out date must be later than check-in date.");
       const tomorrow = new Date(checkIn.getTime() + 24 * 60 * 60 * 1000);
       $("#checkout").val(tomorrow.toISOString().split("T")[0]);
-      return;
+      return false;
     }
+    return true;
+  }
+
+  // Event Handler: Check-in and Check-out Date Selection
+  $("#checkin, #checkout").change(function () {
+    const checkIn = new Date($("#checkin").val());
+    const checkOut = new Date($("#checkout").val() || new Date(checkIn.getTime() + 24 * 60 * 60 * 1000));
+
+    if (!validateDates(checkIn, checkOut)) return;
 
     const diffDays = Math.abs(checkOut - checkIn) / (1000 * 3600 * 24);
-    const pricePerDay = $("#price").val();
-    totalHotel = pricePerDay * diffDays;
+    const roomPrice = parseFloat($("#price").val());
+    totalHotel = roomPrice * diffDays;
 
-    // Update totalPrice
-    updateTotalPrice();
+    updateUI(calculateTotalPrice(roomPrice, diffDays, servicePay));
   });
 
-  // Separate event for #servicess
+  // Event Handler: Service Selection
   $("#services").change(function () {
-    const servselected = $("#services").find(":selected").val();
+    const selectedService = $("#services").find(":selected").val();
     $.ajax({
       type: "GET",
       url: "getserviceprice.php",
-      data: { service: servselected },
+      data: { service: selectedService },
       dataType: "json",
       success: function (data) {
-        servicePay = Number(data.price);
+        servicePay = parseFloat(data.price);
+        const roomPrice = parseFloat($("#price").val());
+        const diffDays = Math.abs(new Date($("#checkout").val()) - new Date($("#checkin").val())) / (1000 * 3600 * 24);
 
-        // Update totalPrice
-        updateTotalPrice();
+        updateUI(calculateTotalPrice(roomPrice, diffDays, servicePay));
       },
     });
   });
 
+  // Reusable Function: Show Toast Notification
+  function showToast(message, type) {
+    const toastHTML = `
+      <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">System</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body text-${type}">
+          ${message}
+        </div>
+      </div>`;
+    $(".toast-container").append(toastHTML);
+    const toast = new bootstrap.Toast($(".toast").last()[0]);
+    toast.show();
+  }
+
+  // Form Submission: Book Now
   $("#bookform").submit(function (e) {
     e.preventDefault();
 
-    roomID = $("#roomID").val();
-    services = $("#services option:selected").val();
-    checkin = $("#checkin").val();
-    checkout = $("#checkout").val();
-    totalprice = $("#totalprice").val();
+    const data = {
+      roomID: $("#roomID").val(),
+      guestID: $("#guestID").val(),
+      services: $("#services option:selected").val(),
+      checkin: $("#checkin").val(),
+      checkout: $("#checkout").val(),
+      totalprice: $("#totalprice").val(),
+    };
 
     $.ajax({
       url: "book.php",
       type: "POST",
-      data: {
-        roomID: $("#roomID").val(),
-        guestID: $("#guestID").val(),
-        services: services,
-        checkin: checkin,
-        checkout: checkout,
-        totalprice: $("#totalprice").val(),
-      },
+      data: data,
       success: function (response) {
         if (response === "ok") {
-          setTimeout(function () {
+          showToast("Successfully booked the room. Redirecting...", "success");
+          setTimeout(() => {
             window.location = "../../index.php";
           }, 3000);
-
-          var toaster = document.getElementById("addToast");
-          var toast = new bootstrap.Toast(toaster);
-          toast.show();
         } else {
-          var toaster = document.getElementById("errorToast");
-          var toast = new bootstrap.Toast(toaster);
-          toast.show();
+          showToast("Booking failed. Please try again later.", "danger");
         }
       },
     });

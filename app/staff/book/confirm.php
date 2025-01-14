@@ -2,23 +2,32 @@
 include("../../directory.php");
 include(CONFIG_DIR."/config.php");
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+function updateBookingStatus($conn, $bookingID, $status) {
+    $sql = "UPDATE booking SET status = ? WHERE bookID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $status, $bookingID);
+    return $stmt->execute();
+}
+
+function updateRoomStatus($conn, $roomID, $status) {
+    $sql = "UPDATE room SET roomstatus = ? WHERE roomID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $status, $roomID);
+    return $stmt->execute();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bookid = $_POST['book'];
-    $sql = "UPDATE booking SET status = 'confirmed' WHERE bookID = $bookid";
+    $roomID = $_POST['room'];
 
-    if(mysqli_query($conn, $sql)){
-        $roomID = $_POST['room'];
-        $sql = "UPDATE room SET roomstatus = 'unavailable' WHERE roomID = $roomID";
-
-        if(mysqli_query($conn, $sql)){
-            echo 'ok';
-        }
-    }
-    else{
+    if (updateBookingStatus($conn, $bookid, 'confirmed') &&
+        updateRoomStatus($conn, $roomID, 'unavailable')) {
+        echo 'ok';
+    } else {
         echo 'error';
     }
 }
-
 mysqli_close($conn);
+
 exit();
 ?>

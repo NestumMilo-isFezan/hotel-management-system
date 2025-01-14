@@ -1,6 +1,7 @@
-<?
-  include('../../directory.php');
-  require (TEMP_DIR.'/bookpart.php');
+<?php
+// Use realpath and dirname to dynamically resolve paths
+include_once realpath(dirname(__FILE__) . '/../../directory.php');
+require_once TEMP_DIR . '/bookpart.php';
 ?>
 
 <!doctype html>
@@ -41,22 +42,23 @@
                       <div class="row g-3">
                         <div class="col-12 input-group mb-3">
                           <label for="services" class="input-group-text" style="width:100px;">Service</label>
-                          <select class="form-select" aria-label="Default select example" name="services" id="services" required>
-                            <option selected>Select the service you want to enjoy</option>
-                            <?php
-                              $servicedata = fetchAll("SELECT * FROM hotelservice WHERE hotelID=$hotelID AND servicestatus='available'");
-                              if($servicedata){
-                                foreach ($servicedata as $selections){
-                                  $serviceID = $selections['serviceID'];
-                                  $serviceName = $selections['name'];
-                                  $serviceprice = $selections['price'];
-                                  ?>
-                                  <option value=<?= $serviceID?>><?= $serviceName?> - RM <?= $serviceprice?></option>
-                            <?php
+                          <?php
+                            $options = '<option selected>Select the service you want to enjoy</option>';
+                            $servicedata = fetchAll("SELECT * FROM hotelservice WHERE hotelID=$hotelID AND servicestatus='available'");
+                            if ($servicedata) {
+                                foreach ($servicedata as $selections) {
+                                    $options .= sprintf(
+                                        '<option value="%d">%s - RM %.2f</option>',
+                                        $selections['serviceID'],
+                                        $selections['name'],
+                                        $selections['price']
+                                    );
                                 }
-                              }
+                            }
                             ?>
-                          </select>
+                            <select class="form-select" aria-label="Default select example" name="services" id="services" required>
+                              <?= $options ?>
+                            </select>
                         </div>
                         <div class="col-md-6 input-group mb-3">
                           <label for="checkin" class="input-group-text" style="width:100px;">Check In</label>
