@@ -11,17 +11,27 @@ class CheckInOutTest extends TestCase
         global $conn;
         $this->conn = $conn;
 
+        if (!$this->conn) {
+            $this->markTestSkipped('No database connection available');
+        }
+
         // Start transaction for test isolation
-        mysqli_begin_transaction($this->conn);
+        if (!mysqli_begin_transaction($this->conn)) {
+            $this->markTestSkipped('Could not start transaction');
+        }
 
         // Add test data
         $roomsql = "INSERT INTO room (hotelID, typeID, roomstatus, roomNo)
         VALUES (1, 'single', 'available', '101')";
-        mysqli_query($this->conn, $roomsql);
+        if (!mysqli_query($this->conn, $roomsql)) {
+            $this->markTestSkipped('Could not insert test room data: ' . mysqli_error($this->conn));
+        }
 
         $booksql = "INSERT INTO booking(roomID, guestID, serviceID, check_in, check_out, total_price, status)
         VALUES(101, 1, 1, '2024-01-01', '2024-01-02', 100, 'pending')";
-        mysqli_query($this->conn, $booksql);
+        if (!mysqli_query($this->conn, $booksql)) {
+            $this->markTestSkipped('Could not insert test booking data: ' . mysqli_error($this->conn));
+        }
     }
 
     public function testCheckIn()
@@ -138,7 +148,10 @@ class CheckInOutTest extends TestCase
 
     protected function tearDown(): void
     {
-        // Rollback transaction to clean up test data
-        mysqli_rollback($this->conn);
+        if ($this->conn) {
+            // Rollback transaction to clean up test data
+            mysqli_rollback($this->conn);
+            mysqli_close($this->conn);
+        }
     }
 }

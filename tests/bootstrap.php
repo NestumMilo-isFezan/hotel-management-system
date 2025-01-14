@@ -13,7 +13,6 @@ $pass = getenv('DB_PASSWORD') ?: 'developer';
 $db = getenv('DB_DATABASE') ?: 'hotelmanagement_test';
 
 // Create connection with error reporting
-global $conn;  // Declare global connection variable
 $conn = mysqli_connect($host, $user, $pass, $db);
 
 if (!$conn) {
