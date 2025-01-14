@@ -14,17 +14,17 @@ jobs:
       maria_db:
         image: mariadb:10.5
         env:
-          MARIADB_DATABASE: hotelmanagement_test
-          MARIADB_USER: mangsacoding
-          MARIADB_PASSWORD: developer
-          MARIADB_ROOT_PASSWORD: root
+          MYSQL_DATABASE: hotelmanagement_test
+          MYSQL_USER: mangsacoding
+          MYSQL_PASSWORD: developer
+          MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=5s
+          --health-timeout=2s
+          --health-retries=5
 
     steps:
     - uses: actions/checkout@v2
@@ -38,18 +38,18 @@ jobs:
     - name: Install Dependencies
       run: composer install
 
-    - name: Wait for MariaDB
+    - name: Verify MariaDB connection
       run: |
-        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -u"mangsacoding" -p"developer" --silent; do
-          sleep 1
-        done
+        sudo apt-get install -y mariadb-client
+        mysqladmin -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper ping
+        mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper -e "SHOW DATABASES;"
 
     - name: Setup Database
       run: |
         mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper < db/schema.sql
 
     - name: Run Tests
-      run: ./vendor/bin/phpunit
+      run: ./vendor/bin/phpunit --debug
       env:
         DB_HOST: 127.0.0.1
         DB_PORT: 3306
