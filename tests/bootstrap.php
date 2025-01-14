@@ -4,8 +4,13 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../app/directory.php';
 require_once __DIR__ . '/../app/config/config.php';
 
-// Ensure we're using a test database
-$conn = mysqli_connect("maria_db", "mangsacoding", "developer", "hotelmanagement_test");
+// Use environment variables or fallback to default values
+$host = getenv('DB_HOST') ?: 'maria_db';
+$user = getenv('DB_USERNAME') ?: 'mangsacoding';
+$pass = getenv('DB_PASSWORD') ?: 'developer';
+$db = getenv('DB_DATABASE') ?: 'hotelmanagement_test';
+
+$conn = mysqli_connect($host, $user, $pass, $db);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
