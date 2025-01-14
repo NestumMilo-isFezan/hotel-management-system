@@ -4,7 +4,11 @@ use PHPUnit\Framework\TestCase;
 
 class ServiceManagementTest extends TestCase
 {
-    protected $conn;
+    public function testSetupMessage()
+    {
+        $this->expectOutputString("Setting up ServiceManagementTest...");
+        $this->setUp();
+    }
 
     public function setUp(): void
     {

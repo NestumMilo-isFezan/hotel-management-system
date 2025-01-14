@@ -4,7 +4,11 @@ use PHPUnit\Framework\TestCase;
 
 class PaymentTest extends TestCase
 {
-    protected $conn;
+    public function testSetupMessage()
+    {
+        $this->expectOutputString("Setting up PaymentTest...");
+        $this->setUp();
+    }
 
     public function setUp(): void
     {
