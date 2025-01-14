@@ -1,7 +1,9 @@
 <?php
-// Use realpath and dirname to dynamically resolve paths
-include_once realpath(dirname(__FILE__) . '/../../directory.php');
-require_once TEMP_DIR . '/bookpart.php';
+// Replace include/require with namespace imports
+namespace App\Staff\Book;
+
+use App\Directory;
+use App\Models\BookPart;
 
 // Helper function to fetch bookings by status
 function getBookingsByStatus($conn, $status) {
@@ -11,8 +13,8 @@ function getBookingsByStatus($conn, $status) {
             JOIN guest ON booking.guestID = guest.guestID
             JOIN hotelservice ON booking.serviceID = hotelservice.serviceID
             WHERE booking.status = ?";
-    $stmt = $conn->prepare($sql); // Use prepared statements for better security
-    $stmt->bind_param("s", $status); // Bind the 'status' parameter
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $status);
     $stmt->execute();
     return $stmt->get_result();
 }

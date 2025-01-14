@@ -1,8 +1,6 @@
 $(document).ready(function () {
   // Variables
-  let totalHotel = 0;
   let servicePay = 0;
-  let totalPayment = 0;
 
   // Reusable Function: Calculate Total Price
   function calculateTotalPrice(roomPrice, days, servicePrice) {
@@ -13,7 +11,6 @@ $(document).ready(function () {
   function updateUI(price) {
     $("#estprice").text(price);
     $("#totalprice").val(price);
-    totalPayment = price;
   }
 
   // Reusable Function: Validate Dates
@@ -36,7 +33,6 @@ $(document).ready(function () {
 
     const diffDays = Math.abs(checkOut - checkIn) / (1000 * 3600 * 24);
     const roomPrice = parseFloat($("#price").val());
-    totalHotel = roomPrice * diffDays;
 
     updateUI(calculateTotalPrice(roomPrice, diffDays, servicePay));
   });
