@@ -16,8 +16,10 @@ class CheckInOutTest extends TestCase
         mysqli_query($this->conn, "DELETE FROM room WHERE roomID = 101");
 
         // Create test data
-        mysqli_query($this->conn, "INSERT INTO room (roomID, roomstatus) VALUES (101, 'available')");
-        mysqli_query($this->conn, "INSERT INTO booking (bookID, roomID, status) VALUES (1, 101, 'confirmed')");
+        mysqli_query($this->conn, "INSERT INTO room (roomID, hotelID, typeID, roomstatus, roomNo)
+            VALUES (101, 1, 1, 'available', '101')");
+        mysqli_query($this->conn, "INSERT INTO booking (bookID, guestID, roomID, status)
+            VALUES (1, 1, 101, 'confirmed')");
     }
 
     public function testCheckIn()

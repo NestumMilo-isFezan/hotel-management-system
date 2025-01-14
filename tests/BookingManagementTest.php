@@ -14,6 +14,12 @@ class BookingManagementTest extends TestCase
         // Reset test database state
         mysqli_query($this->conn, "DELETE FROM booking WHERE bookID IN (1, 2, 3)");
         mysqli_query($this->conn, "DELETE FROM room WHERE roomID = 101");
+
+        // Add test data setup for actual tables
+        mysqli_query($this->conn, "INSERT INTO roomtype (typeID, hotelID, name, description, price, capacity)
+            VALUES (1, 1, 'Test Type', 'Test Description', 100.00, 2)");
+        mysqli_query($this->conn, "INSERT INTO room (roomID, hotelID, typeID, roomstatus, roomNo)
+            VALUES (101, 1, 1, 'available', '101')");
     }
 
     public function testCreateBooking()
@@ -78,10 +84,29 @@ class BookingManagementTest extends TestCase
         $this->assertEquals(0, $row['count']);
     }
 
+    public function testBookingCreation()
+    {
+        // Test booking creation with actual table structure
+        $sql = "INSERT INTO booking (guestID, roomID, serviceID, checkin, checkout, totalprice, status)
+                VALUES (1, 101, 1, '2024-03-20', '2024-03-25', 500.00, 'pending')";
+        $result = mysqli_query($this->conn, $sql);
+        $this->assertTrue($result);
+
+        // Verify booking exists
+        $checkSql = "SELECT * FROM booking WHERE guestID = 1 AND roomID = 101";
+        $result = mysqli_query($this->conn, $checkSql);
+        $booking = mysqli_fetch_assoc($result);
+
+        $this->assertNotNull($booking);
+        $this->assertEquals('2024-03-20', $booking['checkin']);
+        $this->assertEquals('2024-03-25', $booking['checkout']);
+    }
+
     protected function tearDown(): void
     {
-        // Clean up test data
-        mysqli_query($this->conn, "DELETE FROM booking WHERE bookID IN (1, 2, 3)");
+        // Clean up with correct table names
+        mysqli_query($this->conn, "DELETE FROM booking WHERE roomID = 101");
         mysqli_query($this->conn, "DELETE FROM room WHERE roomID = 101");
+        mysqli_query($this->conn, "DELETE FROM roomtype WHERE typeID = 1");
     }
 }

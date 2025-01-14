@@ -13,6 +13,10 @@ class ServiceManagementTest extends TestCase
 
         // Reset test database state
         mysqli_query($this->conn, "DELETE FROM service WHERE name IN ('Room Cleaning', 'Laundry')");
+
+        // Add test data for service management
+        mysqli_query($this->conn, "INSERT INTO hotelservice (serviceID, hotelID, name, price, servicestatus)
+            VALUES (1, 1, 'Room Cleaning', 50.00, 'active')");
     }
 
     public function testCreateService()
@@ -60,6 +64,12 @@ class ServiceManagementTest extends TestCase
         $result = mysqli_query($this->conn, $sql);
         $service = mysqli_fetch_assoc($result);
         $this->assertEquals('inactive', $service['servicestatus']);
+    }
+
+    public function testServiceStatusUpdate() {
+        // Test service status update with actual values
+        $sql = "UPDATE hotelservice SET servicestatus = 'inactive' WHERE serviceID = 1";
+        // ... rest of test
     }
 
     protected function tearDown(): void

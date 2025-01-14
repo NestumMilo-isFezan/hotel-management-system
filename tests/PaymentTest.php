@@ -14,6 +14,10 @@ class PaymentTest extends TestCase
         // Reset test database state
         mysqli_query($this->conn, "DELETE FROM payment WHERE bookID = 1");
         mysqli_query($this->conn, "DELETE FROM booking WHERE bookID = 1");
+
+        // Add test data for payment testing
+        mysqli_query($this->conn, "INSERT INTO booking (bookID, guestID, roomID, totalprice, status)
+            VALUES (1, 1, 101, 1000.00, 'checkout')");
     }
 
     public function testProcessPayment()
@@ -56,6 +60,15 @@ class PaymentTest extends TestCase
 
         $refundAmount = ($totalDays - $daysStayed) * ($totalAmount / $totalDays);
         $this->assertEquals(600, $refundAmount);
+    }
+
+    public function testPaymentCalculation()
+    {
+        // Test payment with actual payment table structure
+        $sql = "INSERT INTO payment (bookID, amountpaid, paymentmethod, balance)
+                VALUES (1, 1000.00, 'cash', 0.00)";
+        $result = mysqli_query($this->conn, $sql);
+        $this->assertTrue($result);
     }
 
     protected function tearDown(): void
