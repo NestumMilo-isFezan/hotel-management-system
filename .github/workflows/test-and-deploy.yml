@@ -38,13 +38,20 @@ jobs:
     - name: Install Dependencies
       run: composer install
 
+    - name: Wait for MariaDB
+      run: |
+        while ! mysqladmin ping -h"127.0.0.1" -P"3306" -u"mangsacoding" -p"developer" --silent; do
+          sleep 1
+        done
+
     - name: Setup Database
-      run: mysql -h maria_db -P 3306 -u mangsacoding -pdeveloper < db/schema.sql
+      run: |
+        mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper < db/schema.sql
 
     - name: Run Tests
       run: ./vendor/bin/phpunit
       env:
-        DB_HOST: maria_db
+        DB_HOST: 127.0.0.1
         DB_PORT: 3306
         DB_DATABASE: hotelmanagement_test
         DB_USERNAME: mangsacoding
