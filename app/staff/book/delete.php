@@ -2,19 +2,22 @@
 include("../../directory.php");
 include(CONFIG_DIR."/config.php");
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $bookid = $_POST['id'];
-    $sql = "DELETE FROM booking WHERE bookID= $bookid";
-    $result =mysqli_query($conn, $sql);
+function deleteBooking($conn, $bookingID) {
+    $sql = "DELETE FROM booking WHERE bookID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $bookingID);
+    return $stmt->execute();
+}
 
-    if($result){
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $bookid = $_POST['id'];
+
+    if (deleteBooking($conn, $bookid)) {
         echo 'ok';
-    }
-    else{
+    } else {
         echo 'error';
     }
-    mysqli_close($conn);
-    exit();
 }
+mysqli_close($conn);
 
 ?>

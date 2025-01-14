@@ -1,6 +1,19 @@
-<?
-  include('../../directory.php');
-  require (TEMP_DIR.'/bookpart.php');
+<?php
+namespace App\Guest\Book;
+
+// Define the base directory constant if not already defined
+defined('TEMP_DIR') || define('TEMP_DIR', realpath(dirname(__FILE__) . '/../../templates'));
+
+// Import required classes/functions
+use App\Directory;
+use App\Templates\BookPart;
+use App\Templates\NavGuest;
+use App\Templates\Footer;
+
+// Initialize template components
+$nav = new NavGuest($userData);
+$footer = new Footer();
+$bookPart = new BookPart();
 ?>
 
 <!doctype html>
@@ -18,9 +31,7 @@
 
   <body data-bs-theme="dark">
     <!-- Navbar -->
-    <?php 
-      require (TEMP_DIR."/navguest.php");
-    ?>
+    <?php echo $nav->render(); ?>
     <!-- End Navbar -->
 
     <!-- Room List -->
@@ -41,22 +52,23 @@
                       <div class="row g-3">
                         <div class="col-12 input-group mb-3">
                           <label for="services" class="input-group-text" style="width:100px;">Service</label>
-                          <select class="form-select" aria-label="Default select example" name="services" id="services" required>
-                            <option selected>Select the service you want to enjoy</option>
-                            <?php
-                              $servicedata = fetchAll("SELECT * FROM hotelservice WHERE hotelID=$hotelID AND servicestatus='available'");
-                              if($servicedata){
-                                foreach ($servicedata as $selections){
-                                  $serviceID = $selections['serviceID'];
-                                  $serviceName = $selections['name'];
-                                  $serviceprice = $selections['price'];
-                                  ?>
-                                  <option value=<?= $serviceID?>><?= $serviceName?> - RM <?= $serviceprice?></option>
-                            <?php
+                          <?php
+                            $options = '<option selected>Select the service you want to enjoy</option>';
+                            $servicedata = fetchAll("SELECT * FROM hotelservice WHERE hotelID=$hotelID AND servicestatus='available'");
+                            if ($servicedata) {
+                                foreach ($servicedata as $selections) {
+                                    $options .= sprintf(
+                                        '<option value="%d">%s - RM %.2f</option>',
+                                        $selections['serviceID'],
+                                        $selections['name'],
+                                        $selections['price']
+                                    );
                                 }
-                              }
+                            }
                             ?>
-                          </select>
+                            <select class="form-select" aria-label="Default select example" name="services" id="services" required>
+                              <?= $options ?>
+                            </select>
                         </div>
                         <div class="col-md-6 input-group mb-3">
                           <label for="checkin" class="input-group-text" style="width:100px;">Check In</label>
@@ -88,9 +100,7 @@
 
     
     <!-- Footer -->
-    <?php
-      include (TEMP_DIR."/footer.php");
-    ?>
+    <?php echo $footer->render(); ?>
 
  <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="guestToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
