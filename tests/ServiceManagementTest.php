@@ -12,7 +12,7 @@ class ServiceManagementTest extends TestCase
         $this->conn = $conn;
 
         // Reset test database state
-        mysqli_query($this->conn, "DELETE FROM service WHERE name IN ('Room Cleaning', 'Laundry')");
+        mysqli_query($this->conn, "DELETE FROM hotelservice WHERE name IN ('Room Cleaning', 'Laundry')");
 
         // Add test data for service management
         mysqli_query($this->conn, "INSERT INTO hotelservice (serviceID, hotelID, name, price, servicestatus)
@@ -24,18 +24,19 @@ class ServiceManagementTest extends TestCase
         $serviceData = [
             'name' => 'Room Cleaning',
             'price' => 50.00,
-            'servicestatus' => 'active'
+            'servicestatus' => 'active',
+            'hotelID' => 1  // Required field
         ];
 
-        $sql = "INSERT INTO service (name, price, servicestatus)
+        $sql = "INSERT INTO hotelservice (name, price, servicestatus, hotelID)
                 VALUES ('{$serviceData['name']}', {$serviceData['price']},
-                        '{$serviceData['servicestatus']}')";
+                        '{$serviceData['servicestatus']}', {$serviceData['hotelID']})";
 
         $result = mysqli_query($this->conn, $sql);
         $this->assertTrue($result);
 
         // Verify service exists
-        $checkSql = "SELECT * FROM service WHERE name = '{$serviceData['name']}'";
+        $checkSql = "SELECT * FROM hotelservice WHERE name = '{$serviceData['name']}'";
         $result = mysqli_query($this->conn, $checkSql);
         $service = mysqli_fetch_assoc($result);
 
@@ -47,17 +48,17 @@ class ServiceManagementTest extends TestCase
     public function testServiceAvailability()
     {
         // Create test service
-        mysqli_query($this->conn, "INSERT INTO service (name, servicestatus)
-                                 VALUES ('Laundry', 'active')");
+        mysqli_query($this->conn, "INSERT INTO hotelservice (name, servicestatus, hotelID)
+                                 VALUES ('Laundry', 'active', 1)");
 
         // Check active service
-        $sql = "SELECT servicestatus FROM service WHERE name = 'Laundry'";
+        $sql = "SELECT servicestatus FROM hotelservice WHERE name = 'Laundry'";
         $result = mysqli_query($this->conn, $sql);
         $service = mysqli_fetch_assoc($result);
         $this->assertEquals('active', $service['servicestatus']);
 
         // Update to inactive
-        mysqli_query($this->conn, "UPDATE service SET servicestatus = 'inactive'
+        mysqli_query($this->conn, "UPDATE hotelservice SET servicestatus = 'inactive'
                                  WHERE name = 'Laundry'");
 
         // Verify status change
@@ -75,6 +76,6 @@ class ServiceManagementTest extends TestCase
     protected function tearDown(): void
     {
         // Clean up test data
-        mysqli_query($this->conn, "DELETE FROM service WHERE name IN ('Room Cleaning', 'Laundry')");
+        mysqli_query($this->conn, "DELETE FROM hotelservice WHERE name IN ('Room Cleaning', 'Laundry')");
     }
 }
