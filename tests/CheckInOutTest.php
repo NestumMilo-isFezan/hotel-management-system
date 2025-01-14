@@ -206,7 +206,7 @@ class CheckInOutTest extends TestCase
         if ($this->conn) {
             // Rollback transaction to clean up test data
             mysqli_rollback($this->conn);
-            mysqli_close($this->conn);
+            // Don't close the connection since it's managed globally
         }
     }
 }
