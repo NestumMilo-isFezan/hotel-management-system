@@ -1,7 +1,7 @@
 <?php
 require("../../directory.php");
 require (TEMP_DIR."/adminpart.php");
-require_once('../templates/sidebar-nav.php');
+require_once '../templates/sidebar-nav.php';
 renderSidebarNav('checkin');
 ?>
 
