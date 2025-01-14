@@ -12,21 +12,19 @@ jobs:
 
     services:
       mysql:
-        image: mariadb:10.5
+        image: mysql:8.0
         env:
-          MARIADB_DATABASE: hotelmanagement_test
-          MARIADB_USER: mangsacoding
-          MARIADB_PASSWORD: mangsacoding
-          MARIADB_ROOT_PASSWORD: root
-          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
+          MYSQL_DATABASE: hotelmanagement_test
+          MYSQL_USER: mangsacoding
+          MYSQL_PASSWORD: mangsacoding
+          MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-          --health-start-period=30s
 
     steps:
     - uses: actions/checkout@v2
@@ -40,15 +38,8 @@ jobs:
     - name: Install Dependencies
       run: composer install
 
-    - name: Debug MySQL Service
-      run: |
-        sudo apt-get install -y mysql-client
-        mysqladmin -h 127.0.0.1 -P 3306 -u root -proot ping
-        mysql -h 127.0.0.1 -P 3306 -u root -proot -e "SHOW DATABASES;"
-
     - name: Setup Database
-      run: |
-        mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pmangsacoding hotelmanagement_test < db/schema.sql
+      run: mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pmangsacoding < db/schema.sql
 
     - name: Run Tests
       run: ./vendor/bin/phpunit
