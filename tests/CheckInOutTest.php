@@ -159,7 +159,7 @@ class CheckInOutTest extends TestCase
     public function testDeleteBooking()
     {
         // Test delete booking functionality
-        $bookId = 1;
+        $bookId = $this->testData['bookingId'];
         $sql = "DELETE FROM booking WHERE bookID = $bookId";
 
         $result = mysqli_query($this->conn, $sql);
@@ -175,8 +175,8 @@ class CheckInOutTest extends TestCase
     public function testCancelBooking()
     {
         // Test cancel booking functionality
-        $bookId = 1;
-        $roomId = 101;
+        $bookId = $this->testData['bookingId'];
+        $roomId = $this->testData['roomId'];
 
         // Update booking status to cancelled
         $sql = "UPDATE booking SET status = 'cancelled' WHERE bookID = $bookId";
