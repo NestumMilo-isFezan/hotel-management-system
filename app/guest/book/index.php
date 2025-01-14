@@ -2,15 +2,18 @@
 namespace App\Guest\Book;
 
 // Define the base directory constant if not already defined
-defined('TEMP_DIR') or define('TEMP_DIR', realpath(dirname(__FILE__) . '/../../templates'));
+defined('TEMP_DIR') || define('TEMP_DIR', realpath(dirname(__FILE__) . '/../../templates'));
 
 // Import required classes/functions
 use App\Directory;
 use App\Templates\BookPart;
+use App\Templates\NavGuest;
+use App\Templates\Footer;
 
-// Include legacy files if they can't be converted to classes yet
-// These will be kept until the codebase can be fully modernized
-require_once TEMP_DIR . '/bookpart.php';
+// Initialize template components
+$nav = new NavGuest();
+$footer = new Footer();
+$bookPart = new BookPart();
 ?>
 
 <!doctype html>
@@ -28,9 +31,7 @@ require_once TEMP_DIR . '/bookpart.php';
 
   <body data-bs-theme="dark">
     <!-- Navbar -->
-    <?php 
-      require_once (TEMP_DIR."/navguest.php");
-    ?>
+    <?php echo $nav->render(); ?>
     <!-- End Navbar -->
 
     <!-- Room List -->
@@ -99,9 +100,7 @@ require_once TEMP_DIR . '/bookpart.php';
 
     
     <!-- Footer -->
-    <?php
-      include (TEMP_DIR."/footer.php");
-    ?>
+    <?php echo $footer->render(); ?>
 
  <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="guestToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">

@@ -7,7 +7,7 @@ use App\Models\BookPart;
 
 // Helper function to fetch bookings by status
 function getBookingsByStatus($conn, $status) {
-    $sql = "SELECT booking.*, room.*, guest.*, hotelservice.* 
+    $sql = "SELECT booking.*, room.*, guest.*, hotelservice.*
             FROM booking
             JOIN room ON booking.roomID = room.roomID
             JOIN guest ON booking.guestID = guest.guestID
