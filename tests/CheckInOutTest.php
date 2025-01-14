@@ -161,8 +161,10 @@ class CheckInOutTest extends TestCase
     public function testInvalidCheckIn()
     {
         $bookId = 999; // Non-existent booking
+        $status = "checkin"; // Store status in a variable
+
         $stmt = mysqli_prepare($this->conn, "UPDATE booking SET status = ? WHERE bookID = ?");
-        mysqli_stmt_bind_param($stmt, "si", "checkin", $bookId);
+        mysqli_stmt_bind_param($stmt, "si", $status, $bookId);
         $result = mysqli_stmt_execute($stmt);
 
         $this->assertTrue($result); // Query should succeed
