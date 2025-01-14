@@ -12,9 +12,13 @@ class CheckInOutTest extends TestCase
         $this->conn = $conn;
 
         // Add test data
-        mysqli_query($this->conn, "INSERT INTO room (roomID, roomstatus) VALUES (101, 'unavailable')");
-        mysqli_query($this->conn, "INSERT INTO booking (bookID, roomID, status)
-            VALUES (1, 101, 'confirmed')");
+        $roomsql = "INSERT INTO room (hotelID, typeID, roomstatus, roomNo)
+        VALUES (1, 'single', 'unavailable', '101')";
+        mysqli_query($this->conn, $roomsql);
+
+        $booksql = "INSERT INTO booking(roomID, guestID, serviceID, check_in, check_out, total_price, status)
+        VALUES(101, 1, 1, '2024-01-01', '2024-01-02', 100, 'pending')";
+        mysqli_query($this->conn, $booksql);
     }
 
     public function testCheckIn()
