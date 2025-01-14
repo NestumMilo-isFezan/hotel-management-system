@@ -6,4 +6,8 @@ class ServiceManagementTest extends TestCase
 {
     protected $conn;
 
+    public function setUp(): void
+    {
+        echo "Setting up ServiceManagementTest...";
+    }
 }
