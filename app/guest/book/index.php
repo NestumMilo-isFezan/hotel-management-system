@@ -11,7 +11,7 @@ use App\Templates\NavGuest;
 use App\Templates\Footer;
 
 // Initialize template components
-$nav = new NavGuest();
+$nav = new NavGuest($userData);
 $footer = new Footer();
 $bookPart = new BookPart();
 ?>
