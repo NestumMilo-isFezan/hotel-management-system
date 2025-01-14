@@ -23,8 +23,8 @@ class CheckInOutTest extends TestCase
 
         // Add test data
         // 1. First insert hotel
-        $hotelsql = "INSERT INTO hotel (name, address, phone, email)
-            VALUES ('Test Hotel', 'Test Address', '1234567890', 'test@hotel.com')";
+        $hotelsql = "INSERT INTO hotel (hotelname, address, contact, email, postcode, city, state, country, info, about, img_path)
+            VALUES ('Test Hotel', 'Test Address', '1234567890', 'test@hotel.com', '12345', 'Test City', 'Test State', 'Test Country', 'Test Info', 'Test About', 'test.jpg')";
         if (!mysqli_query($this->conn, $hotelsql)) {
             $this->markTestSkipped('Could not insert test hotel data: ' . mysqli_error($this->conn));
         }
