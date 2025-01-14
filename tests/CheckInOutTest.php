@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 class CheckInOutTest extends TestCase
 {
     protected $conn;
+    protected $testData;
 
     protected function setUp(): void
     {
@@ -21,28 +22,69 @@ class CheckInOutTest extends TestCase
         }
 
         // Add test data
+        // 1. First insert hotel
+        $hotelsql = "INSERT INTO hotel (name, address, phone, email)
+            VALUES ('Test Hotel', 'Test Address', '1234567890', 'test@hotel.com')";
+        if (!mysqli_query($this->conn, $hotelsql)) {
+            $this->markTestSkipped('Could not insert test hotel data: ' . mysqli_error($this->conn));
+        }
+        $hotelId = mysqli_insert_id($this->conn);
+
+        // 2. Insert room type
         $roomtype = "INSERT INTO roomtype (hotelID, name, description, price, capacity, room_imgpath)
-            VALUES (1, 'single', 'available', 100, 1, 'test.jpg')";
+            VALUES ($hotelId, 'single', 'Test room', 100, 1, 'test.jpg')";
         if (!mysqli_query($this->conn, $roomtype)) {
             $this->markTestSkipped('Could not insert test room type data: ' . mysqli_error($this->conn));
         }
+        $typeId = mysqli_insert_id($this->conn);
+
+        // 3. Insert room
         $roomsql = "INSERT INTO room (hotelID, typeID, roomstatus, roomNo)
-        VALUES (1, 1, 'available', '101')";
+            VALUES ($hotelId, $typeId, 'available', '101')";
         if (!mysqli_query($this->conn, $roomsql)) {
             $this->markTestSkipped('Could not insert test room data: ' . mysqli_error($this->conn));
         }
+        $roomId = mysqli_insert_id($this->conn);
 
+        // 4. Insert guest
+        $guestsql = "INSERT INTO guest (name, email, phone, address)
+            VALUES ('Test Guest', 'guest@test.com', '1234567890', 'Test Address')";
+        if (!mysqli_query($this->conn, $guestsql)) {
+            $this->markTestSkipped('Could not insert test guest data: ' . mysqli_error($this->conn));
+        }
+        $guestId = mysqli_insert_id($this->conn);
+
+        // 5. Insert service (if needed)
+        $servicesql = "INSERT INTO service (name, price, description)
+            VALUES ('Test Service', 50, 'Test Service Description')";
+        if (!mysqli_query($this->conn, $servicesql)) {
+            $this->markTestSkipped('Could not insert test service data: ' . mysqli_error($this->conn));
+        }
+        $serviceId = mysqli_insert_id($this->conn);
+
+        // 6. Finally insert booking
         $booksql = "INSERT INTO booking(roomID, guestID, serviceID, check_in, check_out, total_price, status)
-        VALUES(101, 1, 1, '2024-01-01', '2024-01-02', 100, 'pending')";
+            VALUES($roomId, $guestId, $serviceId, '2024-01-01', '2024-01-02', 100, 'pending')";
         if (!mysqli_query($this->conn, $booksql)) {
             $this->markTestSkipped('Could not insert test booking data: ' . mysqli_error($this->conn));
         }
+        $bookingId = mysqli_insert_id($this->conn);
+
+        // Store IDs for use in tests
+        $this->testData = [
+            'hotelId' => $hotelId,
+            'typeId' => $typeId,
+            'roomId' => $roomId,
+            'guestId' => $guestId,
+            'serviceId' => $serviceId,
+            'bookingId' => $bookingId
+        ];
     }
 
     public function testCheckIn()
     {
-        $bookId = 1;
-        $roomId = 101;
+        $bookId = $this->testData['bookingId'];
+        $roomId = $this->testData['roomId'];
 
         // Update both booking and room status
         $bookingSql = "UPDATE booking SET status = 'checkin' WHERE bookID = $bookId";
@@ -69,8 +111,8 @@ class CheckInOutTest extends TestCase
 
     public function testCheckOut()
     {
-        $bookId = 1;
-        $roomId = 101;
+        $bookId = $this->testData['bookingId'];
+        $roomId = $this->testData['roomId'];
 
         // Update both booking and room status
         $bookingSql = "UPDATE booking SET status = 'checkout' WHERE bookID = $bookId";
