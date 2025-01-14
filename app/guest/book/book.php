@@ -13,7 +13,7 @@ include(CONFIG_DIR."/config.php");
         $checkout = date('Y-m-d', strtotime($_POST['checkout']));
         $totalprice = $_POST['totalprice'];
 
-        // Sql Queries
+        // Sql Queries for the system
         $sql = "INSERT INTO booking(roomID, guestID, serviceID, check_in, check_out, total_price, status)
         VALUES($roomID, $guestID, $services, '$checkin', '$checkout', $totalprice, 'pending')";
 
