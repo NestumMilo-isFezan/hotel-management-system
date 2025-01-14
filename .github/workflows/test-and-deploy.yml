@@ -44,9 +44,9 @@ jobs:
         mysqladmin -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper ping
         mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper -e "SHOW DATABASES;"
 
-    - name: Setup Database
+    - name: Setup Database Schema
       run: |
-        mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper < db/schema.sql
+        mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper hotelmanagement_test < db/schema.sql
 
     - name: Run Tests
       run: ./vendor/bin/phpunit

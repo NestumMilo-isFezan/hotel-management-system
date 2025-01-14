@@ -12,33 +12,30 @@ class RoomManagementTest extends TestCase
         $this->conn = $conn;
 
         // Reset the test database state
-        mysqli_query($this->conn, "DELETE FROM rooms WHERE room_number IN ('101', '102', '103')");
+        mysqli_query($this->conn, "DELETE FROM room WHERE roomID IN (101, 102, 103)");
     }
 
     public function testCreateRoom()
     {
         $roomData = [
-            'room_number' => '101',
-            'type_id' => 1,
-            'status' => 'available'
+            'roomID' => 101,
+            'roomstatus' => 'available'
         ];
 
         // Insert room using direct SQL
-        $sql = "INSERT INTO rooms (room_number, type_id, status)
-                VALUES ('{$roomData['room_number']}', {$roomData['type_id']}, '{$roomData['status']}')";
+        $sql = "INSERT INTO room (roomID, roomstatus)
+                VALUES ({$roomData['roomID']}, '{$roomData['roomstatus']}')";
         $result = mysqli_query($this->conn, $sql);
 
         $this->assertTrue($result);
 
         // Verify room exists in database
-        $checkSql = "SELECT * FROM rooms WHERE room_number = '{$roomData['room_number']}'";
+        $checkSql = "SELECT * FROM room WHERE roomID = {$roomData['roomID']}";
         $result = mysqli_query($this->conn, $checkSql);
         $room = mysqli_fetch_assoc($result);
 
         $this->assertNotNull($room);
-        $this->assertEquals($roomData['room_number'], $room['room_number']);
-        $this->assertEquals($roomData['type_id'], $room['type_id']);
-        $this->assertEquals($roomData['status'], $room['status']);
+        $this->assertEquals($roomData['roomstatus'], $room['roomstatus']);
     }
 
     public function testRoomTypeAssignment()
