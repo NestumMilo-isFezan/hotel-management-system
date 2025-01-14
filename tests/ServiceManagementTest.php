@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 
 class ServiceManagementTest extends TestCase
 {
+    private bool $setupMessagePrinted = false;
+
     public function testSetupMessage()
     {
         $this->expectOutputString("Setting up ServiceManagementTest...");
@@ -12,6 +14,9 @@ class ServiceManagementTest extends TestCase
 
     public function setUp(): void
     {
-        echo "Setting up ServiceManagementTest...";
+        if (!$this->setupMessagePrinted) {
+            echo "Setting up ServiceManagementTest...";
+            $this->setupMessagePrinted = true;
+        }
     }
 }

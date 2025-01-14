@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 
 class RoomManagementTest extends TestCase
 {
+    private bool $setupMessagePrinted = false;
+
     public function testSetupMessage()
     {
         $this->expectOutputString("Setting up RoomManagementTest...");
@@ -12,6 +14,9 @@ class RoomManagementTest extends TestCase
 
     public function setUp(): void
     {
-        echo "Setting up RoomManagementTest...";
+        if (!$this->setupMessagePrinted) {
+            echo "Setting up RoomManagementTest...";
+            $this->setupMessagePrinted = true;
+        }
     }
 }

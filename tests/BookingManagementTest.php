@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 
 class BookingManagementTest extends TestCase
 {
+    private bool $setupMessagePrinted = false;
+
     public function testSetupMessage()
     {
         $this->expectOutputString("Setting up BookingManagementTest...");
@@ -12,6 +14,9 @@ class BookingManagementTest extends TestCase
 
     public function setUp(): void
     {
-        echo "Setting up BookingManagementTest...";
+        if (!$this->setupMessagePrinted) {
+            echo "Setting up BookingManagementTest...";
+            $this->setupMessagePrinted = true;
+        }
     }
 }

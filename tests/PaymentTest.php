@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 
 class PaymentTest extends TestCase
 {
+    private bool $setupMessagePrinted = false;
+
     public function testSetupMessage()
     {
         $this->expectOutputString("Setting up PaymentTest...");
@@ -12,6 +14,9 @@ class PaymentTest extends TestCase
 
     public function setUp(): void
     {
-        echo "Setting up PaymentTest...";
+        if (!$this->setupMessagePrinted) {
+            echo "Setting up PaymentTest...";
+            $this->setupMessagePrinted = true;
+        }
     }
 }
