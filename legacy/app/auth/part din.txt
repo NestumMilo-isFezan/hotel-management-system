@@ -1,0 +1,40 @@
+userRoles : 1- Staff, 2- Guest
+make sure authentication dia secure dari sql injection ya...
+
+1. Utk register
+-> "INSERT INTO useracc(username, email, password, userRoles) VALUES('username', 'email','passwordhash', 2)"
+-> If berjaya, buat "INSERT INTO guest...." blah3 kasi data dia kosong
+
+2. Utk login
+-> "SELECT * FROM useracc WHERE username='username' AND password='passwordhash'"
+      |
+      V
+-> "masuk, userID, username, userroles kedalam session..."
+      |
+      V
+-> 'SELECT * FROM guest where userID=' .$SESSION['UID']
+      |
+      V
+-> masukkan guestID kedalam session guestID
+      |
+      V
+-> "Check kalau userroles dia Staff, pergi ke '../staff/index.php'"
+_> "Kalau dia guest, pergi ke '../index.php'"
+
+3. Add Staff
+-> Buat Form untuk memenuhi data yang dperlukan untuk table useracc dan staff
+
+div-content
+      form-
+            div-1
+                  register punya part
+                  
+            div-2
+                  staff punya part
+            div-3
+                  button
+      /form
+/div
+
+4. Logout,
+-> Ini unset session pastu session abort

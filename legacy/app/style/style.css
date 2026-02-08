@@ -1,0 +1,10 @@
+/*.r-pic{
+    height: 60vh;
+    width: 100%;
+}
+
+@media (max-width: 991.98px) {
+    .r-pic{
+        height: 100vh;
+    }
+}*/

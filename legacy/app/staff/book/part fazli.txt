@@ -1,0 +1,60 @@
+Buat Page, nama title page tu Manage Guest Booking
+
+page index tu page utk view list2 booking yang dia buat....
+buat 3 table view,
+
+Jadi dia begini.....
+Ini command dia
+->
+....booking.*, room.*, hotelservice.* FROM booking
+JOIN room ON booking.roomID = room.roomID
+JOIN hotelservice ON booking.serviceID=hotelservice.serviceID
+JOIN guest ON booking.guestID = guest.guestID...
+
+
+
+h1- Manage Guest booking
+div- content
+    div- col-1
+        div- table title
+            h2- Booking Request
+        div- table content
+            table- simpan data (SELECT ... where status='pending')
+
+    div- col-2
+        div- table title
+            h2- Confirmed Booking
+        div- table content
+            table- simpan data (SELECT ... where status="confirmed")
+
+    div- col-3
+        div- table title
+            h2- Cancelled Request
+        div- table content
+            table- simpan data (SELECT ... where status="cancelled")
+
+
+====================================
+utk table make sure ini layout dia
+
+No | Guest Name | Room No (roomNo) | Services | Check In (checkIn) | Check Out (checkOut) | Modify
+
+Di bahagian modify
+-> kasi buat
+<a href="confirm.php?book=<?= $bookID?>&room=<?= $roomID?>"
+
+
+nanti butang Modify (confirm.php)
+-kalau kat table request ,
+di action confirm.php buat sql query utk
+->> UPDATE ON booking SET status = "confirmed" WHERE bookID = $bookID
+if(mysqli_query($conn, $sql))
+->> UPDATE ON room SET roomstatus = "occupy" WHERE roomID= $roomID
+
+-kalau kat table cancel  ,
+di action remove.php buat sql query utk
+->> DELETE * FROM booking WHERE bookID = ID
+
+-kalau kat table confirm,
+takpayah letak modify
+

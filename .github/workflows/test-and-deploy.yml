@@ -1,0 +1,74 @@
+name: Test and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      maria_db:
+        image: mariadb:10.5
+        env:
+          MYSQL_DATABASE: hotelmanagement_test
+          MYSQL_USER: mangsacoding
+          MYSQL_PASSWORD: developer
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=5s
+          --health-timeout=2s
+          --health-retries=5
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mysqli, pdo_mysql
+
+    - name: Install Dependencies
+      run: composer install
+
+    - name: Verify MariaDB connection
+      run: |
+        sudo apt-get install -y mariadb-client
+        mysqladmin -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper ping
+        mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper -e "SHOW DATABASES;"
+
+    - name: Setup Database Schema
+      run: |
+        mysql -h 127.0.0.1 -P 3306 -u mangsacoding -pdeveloper hotelmanagement_test < db/schema.sql
+
+    - name: Run Tests
+      run: ./vendor/bin/phpunit
+      env:
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: hotelmanagement_test
+        DB_USERNAME: mangsacoding
+        DB_PASSWORD: developer
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Deploy to production
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEPLOY_HOST }}
+        username: ${{ secrets.DEPLOY_USER }}
+        key: ${{ secrets.DEPLOY_KEY }}
+        script: |
+          cd /path/to/your/project
+          ./scripts/deploy.sh

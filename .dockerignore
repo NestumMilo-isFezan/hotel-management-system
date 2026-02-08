@@ -1,0 +1,11 @@
+.git
+.env
+.devcontainer
+legacy
+vendor
+node_modules
+phpunit.xml
+tests
+README.md
+conductor
+*.sql
