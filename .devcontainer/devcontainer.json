@@ -1,0 +1,17 @@
+{
+    "name": "Hotel Management System",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/var/www/html",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "xdebug.php-debug",
+                "bmewburn.vscode-intelephense-client",
+                "moshfeu.compare-folders"
+            ]
+        }
+    },
+    "postCreateCommand": "composer install",
+    "remoteUser": "root"
+}
